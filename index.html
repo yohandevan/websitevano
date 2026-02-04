@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Special for Anin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(-45deg, #004d40, #00838f, #00acc1, #4dd0e1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            touch-action: manipulation;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: rise 10s infinite ease-in;
+            z-index: 1;
+        }
+
+        @keyframes rise {
+            0% { bottom: -100px; transform: translateX(0); }
+            100% { bottom: 100vh; transform: translateX(-50px); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 40px 25px;
+            border-radius: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+            z-index: 10;
+            width: 85%;
+            max-width: 450px;
+            pointer-events: none;
+        }
+        
+        .glass-card * { pointer-events: auto; }
+
+        .bob-container {
+            width: 140px;
+            height: 140px;
+            position: absolute;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.5s ease-in-out;
+            -webkit-tap-highlight-color: transparent;
+            top: -200px;
+            left: -200px;
+        }
+
+        .bob-img { width: 110px; pointer-events: none; }
+
+        button {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 800;
+            border-radius: 20px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .btn-yes { background: #fff; color: #00838f; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        #btnNo { background: rgba(0,0,0,0.3); color: #fff; border: 1px solid #fff; }
+
+        #modal-overlay, #fact-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 77, 64, 0.95);
+            z-index: 2000;
+            justify-content: center; align-items: center;
+        }
+
+        #fact-overlay { z-index: 4000; }
+
+        .modal-content {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 30px;
+            text-align: center;
+            width: 80%;
+            color: #004d40;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        #letter-stage {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            background: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .paper {
+            background: #fffef0;
+            width: 85%;
+            max-width: 420px;
+            padding: 35px 25px;
+            border-radius: 5px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            color: #333;
+            transform: rotate(-1deg);
+            display: none;
+            position: relative;
+            z-index: 3001;
+        }
+
+        .paper-text {
+            font-size: 16px;
+            font-weight: 500;
+            text-align: left;
+            line-height: 1.7;
+            color: #2c3e50;
+        }
+
+        #final-msg {
+            display: none;
+            position: fixed;
+            z-index: 9999; 
+            text-align: center;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            pointer-events: none;
+        }
+
+        #final-msg h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 38px;
+            background: white;
+            color: #006064;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 0;
+        }
+
+        .flower, .heart-particle { position: fixed; z-index: 5000; pointer-events: none; }
+        .hidden { display: none !important; }
+
+        @keyframes megaFall { 
+            0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(1080deg); opacity: 0; } 
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bubbles-container"></div>
+
+    <div id="modal-overlay">
+        <div class="modal-content">
+            <img id="modal-img" src="" style="width: 110px; margin-bottom: 20px; border-radius: 15px;">
+            <p id="modal-text" style="font-weight: 900; font-size: 22px; line-height: 1.4; margin-bottom: 30px;"></p>
+            <button class="btn-yes" onclick="nextModal()">OKE DEH</button>
+        </div>
+    </div>
+
+    <div id="fact-overlay">
+        <div class="modal-content">
+            <img src="keren.jpg" style="width: 120px; margin-bottom: 15px; border-radius: 15px;">
+            <p style="font-weight: 900; font-size: 19px; color: #004d40;">FUN FACT:<br>Memaafkan orang ganteng kayak aku terbukti bisa bikin mood kamu naik 1000%! 😎</p>
+            <button class="btn-yes" onclick="finishAll()">SIKATTT ✨</button>
+        </div>
+    </div>
+
+    <div id="bob1-container" class="bob-container" onclick="toStage2()">
+        <img src="gila.jpg" style="width: 120px; border-radius: 15px;">
+    </div>
+
+    <div id="bob2-container" class="bob-container hidden" onclick="toStage3()">
+        <img src="gila.jpg" style="width: 120px; border-radius: 15px;">
+    </div>
+
+    <div id="game-area">
+        <div id="s1">
+            <div class="glass-card">
+                <h2>HALO ANIN! 👋</h2>
+                <p style="font-size: 19px;">Tangkap SpongeBob-nya bentar ya...</p>
+            </div>
+        </div>
+        <div id="s2" class="hidden">
+            <div class="glass-card">
+                <p style="font-weight: 800; font-size: 21px;">Maaf ya kalau kemarin ada hal yang kurang berkenan. Aku harap kita bisa asik lagi.</p>
+                <small>(Di mana dia? Cari dan tangkap Nin!)</small>
+            </div>
+        </div>
+        <div id="s3" class="hidden">
+            <div class="glass-card">
+                <h2>CLEAR YA, NIN? ✨</h2>
+                <div class="btn-container">
+                    <button class="btn-yes" onclick="goToLetter()">IYA, MAAFIN</button>
+                    <button id="btnNo" onclick="startModal()">ENGGAK!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="letter-stage">
+        <div id="envelope-div" style="text-align: center;">
+            <div style="font-size: 110px; cursor: pointer; filter: drop-shadow(0 0 10px white);" onclick="openPaper()">📩</div>
+            <p style="font-weight: 800; font-size: 18px; color: #fff; margin-top: 15px;">KLIK SURATNYA</p>
+        </div>
+        <div id="paper-div" class="paper">
+            <div class="paper-text">
+                <strong>Halo Anin,</strong><br><br>
+                Maaf ya buat kejadian kemarin. Aku beneran nggak maksud bikin kamu nggak nyaman. Aku cuma pengen kita bisa asik dan ngobrol seru lagi kayak biasanya.<br><br>
+                Makasih udah sabar mainin game kecil ini. Semoga setelah ini semuanya clear ya?<br><br>
+                Sekali lagi, maafin aku ya, Nin?<br>
+                <em style="font-size: 12px; color: #7f8c8d;">P.S. Kalau dimaafin dapet bonus hujan bunga!</em>
+            </div>
+            <button class="btn-yes" style="background: #00838f; color: #fff; margin-top: 25px;" onclick="goToFact()">Dimaafin kok! ❤️</button>
+        </div>
+    </div>
+
+    <div id="final-msg">
+        <h1>INI BUNGA BUAT KAMU</h1>
+        <p style="font-weight: 900; font-size: 26px; color: #fff; margin-top: 20px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5);">Semoga suka ya, Anin! 🌸</p>
+    </div>
+
+    <script>
+        const bc = document.getElementById('bubbles-container');
+        for(let i=0; i<15; i++) {
+            let b = document.createElement('div'); b.className = 'bubble';
+            let s = Math.random() * 50 + 20 + 'px';
+            b.style.width = s; b.style.height = s;
+            b.style.left = Math.random() * 100 + 'vw';
+            b.style.animationDelay = Math.random() * 8 + 's';
+            bc.appendChild(b);
+        }
+
+        const rayuan = [
+            { t: "Maafin aku dong...", i: "sedih.jpg" },
+            { t: "Masa ga mau maafin orang ganteng dan lucu kayak aku? 🤔", i: "keren.jpg" },
+            { t: "Janji deh gak bakal nakal lagi! Dimaafin ya? ✨", i: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzh6eXF3bm95am9icXN4eXN6eXN6eXN6eXN6eXN6eXN6eXN6ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/nDSlfqf0gn5g4/giphy.gif" }
+        ];
+        let currentPesan = 0;
+        let moveInterval;
+
+        function setPos(id) {
+            let el = document.getElementById(id);
+            el.style.left = Math.random() * (window.innerWidth - 130) + 'px';
+            el.style.top = Math.random() * (window.innerHeight - 130) + 'px';
+        }
+
+        window.onload = () => { setPos('bob1-container'); };
+
+        function toStage2() {
+            document.getElementById('s1').classList.add('hidden');
+            document.getElementById('bob1-container').classList.add('hidden');
+            document.getElementById('s2').classList.remove('hidden');
+            let b2 = document.getElementById('bob2-container');
+            b2.classList.remove('hidden');
+            setPos('bob2-container');
+            // Kecepatan diatur lebih gesit (0.8 detik)
+            moveInterval = setInterval(() => { if(!b2.classList.contains('hidden')) setPos('bob2-container'); }, 800);
+        }
+
+        function toStage3() {
+            clearInterval(moveInterval);
+            document.getElementById('s2').classList.add('hidden');
+            document.getElementById('bob2-container').classList.add('hidden');
+            document.getElementById('s3').classList.remove('hidden');
+        }
+
+        function startModal() { currentPesan = 0; showModal(); }
+        function showModal() {
+            document.getElementById('modal-text').innerText = rayuan[currentPesan].t;
+            document.getElementById('modal-img').src = rayuan[currentPesan].i;
+            document.getElementById('modal-overlay').style.display = 'flex';
+        }
+        function nextModal() {
+            currentPesan++;
+            if (currentPesan < rayuan.length) showModal();
+            else document.getElementById('modal-overlay').style.display = 'none';
+        }
+
+        function goToLetter() {
+            document.getElementById('game-area').classList.add('hidden');
+            document.getElementById('letter-stage').style.display = 'flex';
+        }
+
+        function openPaper() {
+            document.getElementById('envelope-div').classList.add('hidden');
+            document.getElementById('paper-div').style.display = 'block';
+            // Tambahan: Partikel Hati
+            setInterval(createHeart, 400);
+        }
+
+        function createHeart() {
+            const h = document.createElement('div');
+            h.className = 'heart-particle';
+            h.innerText = '❤️';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.bottom = '0';
+            h.style.fontSize = Math.random() * 20 + 10 + 'px';
+            h.style.animation = `floatHeart ${Math.random() * 3 + 2}s linear forwards`;
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 4000);
+        }
+
+        function goToFact() {
+            document.getElementById('letter-stage').classList.add('hidden');
+            document.getElementById('fact-overlay').style.display = 'flex';
+        }
+
+        function finishAll() {
+            document.getElementById('fact-overlay').style.display = 'none';
+            document.getElementById('bubbles-container').classList.add('hidden');
+            document.getElementById('final-msg').style.display = 'block';
+            setInterval(createFlower, 6);
+        }
+
+        function createFlower() {
+            const flowers = ['🌸', '🌼', '🌻', '🌺', '🌹', '🌷', '🏵️', '💐', '💝', '🌈'];
+            let f = document.createElement('div');
+            f.className = 'flower';
+            f.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+            f.style.left = Math.random() * 100 + 'vw';
+            f.style.top = '-15vh';
+            f.style.fontSize = Math.random() * 50 + 60 + 'px';
+            let dur = Math.random() * 1.5 + 1;
+            f.style.animation = `megaFall ${dur}s linear forwards`;
+            document.body.appendChild(f);
+            setTimeout(() => f.remove(), dur * 1000);
+        }
+    </script>
+</body>
+</html>
