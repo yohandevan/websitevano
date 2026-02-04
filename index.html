@@ -66,7 +66,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.05s linear; 
             -webkit-tap-highlight-color: transparent;
             top: -200px;
             left: -200px;
@@ -97,6 +97,8 @@
             z-index: 2000;
             justify-content: center; align-items: center;
         }
+
+        #fact-overlay { z-index: 4000; }
 
         .modal-content {
             background: white;
@@ -204,8 +206,8 @@
         </div>
         <div id="s2" class="hidden">
             <div class="glass-card">
-                <p id="text-s2" style="font-weight: 800; font-size: 21px;">Maaf ya kalau kemarin ada hal yang kurang berkenan. Aku harap kita bisa asik lagi.</p>
-                <small id="small-s2">(Di mana dia? Cari dan tangkap Nin!)</small>
+                <p id="text-s2" style="font-weight: 800; font-size: 21px;">Maaf ya kalau kemarin ada hal yang bikin kamu sakit hati. Aku harap kita tetep baik baik aja.</p>
+                <small id="small-s2">(GOOD LUCK NANGKAP INI! ⚡⚡⚡)</small>
             </div>
         </div>
         <div id="s3" class="hidden">
@@ -227,10 +229,10 @@
         <div id="paper-div" class="paper">
             <div style="font-size: 16px; font-weight: 500; text-align: left; line-height: 1.7; color: #2c3e50;">
                 <strong>Halo Anin,</strong><br><br>
-                Maaf ya buat kejadian kemarin. Aku beneran ga ada maksud bikin kamu nggak nyaman. Aku cuma pengen kita bisa asik dan ngobrol seru lagi kayak biasanya.<br><br>
+                Maaf ya buat kejadian kemarin. Aku beneran nggak maksud bikin kamu nggak nyaman. Aku cuma pengen kita bisa asik dan ngobrol seru lagi kayak biasanya.<br><br>
                 Makasih udah sabar mainin game kecil ini. Semoga setelah ini semuanya clear ya?<br><br>
                 Sekali lagi, maafin aku ya, Nin?<br>
-                <em style="font-size: 12px; color: #7f8c8d;">Nb : Kalau ga dimaafin aku bakal kirim cacing besar alaska kerumahmu</em>
+                <em style="font-size: 12px; color: #7f8c8d;">P.S. Kalau dimaafin dapet bonus hujan bunga!</em>
             </div>
             <button class="btn-yes" style="background: #00838f; color: #fff; margin-top: 25px;" onclick="goToFact()">Dimaafin kok! ❤️</button>
         </div>
@@ -253,7 +255,7 @@
 
         const rayuan = [
             { t: "Maafin aku dong...", i: "sedih.jpg" },
-            { t: "Masa ga mau maafin orang ganteng kayak aku? 🤔", i: "keren.jpg" },
+            { t: "Masa ga mau maafin orang ganteng dan lucu kayak aku? 🤔", i: "keren.jpg" },
             { t: "Janji deh gak bakal nakal lagi! ✨", i: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzh6eXF3bm95am9icXN4eXN6eXN6eXN6eXN6eXN6eXN6eXN6ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/nDSlfqf0gn5g4/giphy.gif" }
         ];
         let currentPesan = 0;
@@ -261,8 +263,10 @@
 
         function setPos(id) {
             let el = document.getElementById(id);
-            el.style.left = Math.random() * (window.innerWidth - 130) + 'px';
-            el.style.top = Math.random() * (window.innerHeight - 130) + 'px';
+            let x = Math.random() * (window.innerWidth - 130);
+            let y = Math.random() * (window.innerHeight - 130);
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
         }
 
         window.onload = () => { setPos('bob1-container'); };
@@ -275,21 +279,21 @@
             b2.classList.remove('hidden');
             setPos('bob2-container');
             
-            // SUPER LINCAH: 0.4 detik (400ms)
-            moveInterval = setInterval(() => { setPos('bob2-container'); }, 400);
+            // GOD SPEED: 0.15 detik
+            moveInterval = setInterval(() => { setPos('bob2-container'); }, 150);
 
-            // MERCY TIMER: Setelah 7 detik kasian, kasih gratis
+            // MERCY TIMER: 12 Detik biar lebih dramatis
             setTimeout(() => {
                 if(!b2.classList.contains('hidden')) {
                     clearInterval(moveInterval);
-                    b2.style.transition = "all 1s ease";
+                    b2.style.transition = "all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
                     b2.style.left = "50%";
                     b2.style.top = "75%";
                     b2.style.transform = "translateX(-50%)";
                     document.getElementById('text-s2').innerText = "Ya udah nih tangkap aja, kasian cape... 🥺";
                     document.getElementById('small-s2').innerText = "(Aku pasrah Nin, klik aku!)";
                 }
-            }, 7000);
+            }, 12000);
         }
 
         function toStage3() {
